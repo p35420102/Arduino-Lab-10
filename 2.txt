@@ -1,0 +1,26 @@
+Hw2
+#include <IRremote.h>
+const int irReceiverPin=2;
+IRrecv irrecv(irReceiverPin);
+decode_results results;
+const int buttonPin=4;
+int buttonState = 0;
+IRsend irsend;
+
+void setup() {
+  pinMode(buttonPin,INPUT);
+}
+
+void loop() {
+  buttonState = digitalRead(buttonPin);
+  if(buttonState == HIGH){
+    irsend.sendNEC(0x4FB48B7, 32);
+  }
+  if(irrecv.decode(&results)){
+    Serial.print("irCode: ");
+    Serial.print(results.value, HEX);
+    Serial.print(", bits: ");
+    Serial.print(results.bits);
+    irrecv.resume();
+  }
+}
